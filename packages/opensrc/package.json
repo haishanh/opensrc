@@ -1,5 +1,8 @@
 {
-  "name": "opensrc",
+  "name": "@hsjs/opensrc",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.7.3",
   "description": "Fetch source code for packages to give coding agents deeper context",
   "type": "module",

@@ -238,7 +238,8 @@ async function fixWindowsShims() {
   if (!existsSync(cmdShim)) return;
 
   const cpuArch = arch() === 'arm64' ? 'arm64' : 'x64';
-  const relativeBinaryPath = `node_modules\\opensrc\\bin\\opensrc-win32-${cpuArch}.exe`;
+  const packagePath = packageJson.name.split('/').join('\\');
+  const relativeBinaryPath = `node_modules\\${packagePath}\\bin\\opensrc-win32-${cpuArch}.exe`;
   const absoluteBinaryPath = join(npmBinDir, relativeBinaryPath);
 
   if (!existsSync(absoluteBinaryPath)) return;
