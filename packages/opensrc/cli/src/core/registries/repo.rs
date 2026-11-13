@@ -207,7 +207,7 @@ fn resolve_github(spec: &RepoSpec) -> Result<ResolvedRepo> {
 
     if resp.status() == reqwest::StatusCode::NOT_FOUND {
         let hint = if super::github_token().is_none() {
-            " If this is a private repo, set GITHUB_TOKEN."
+            " If this is a private repo, set OPENSRC_GITHUB_TOKEN or GITHUB_TOKEN."
         } else {
             " Your token may lack access to this repository."
         };

@@ -1,15 +1,15 @@
 # Authentication
 
-opensrc reads three environment variables to authenticate against private repositories and registry APIs. Set only the ones you need — nothing is persisted, tokens are read from the environment on each run.
+opensrc reads environment variables to authenticate against private repositories and registry APIs. Set only the ones you need — nothing is persisted, tokens are read from the environment on each run.
 
 Tokens are used for both resolving a repository's default branch (via each host's API) and for the underlying `git clone` over HTTPS.
 
 ## GitHub
 
-Set `GITHUB_TOKEN` to a personal access token:
+Set `OPENSRC_GITHUB_TOKEN` to a personal access token. opensrc uses it first, falling back to `GITHUB_TOKEN` when `OPENSRC_GITHUB_TOKEN` is unset or empty:
 
 ```bash
-export GITHUB_TOKEN=ghp_your_token_here
+export OPENSRC_GITHUB_TOKEN=ghp_your_token_here
 opensrc path vercel/private-repo
 ```
 

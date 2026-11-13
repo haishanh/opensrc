@@ -158,7 +158,13 @@ pub(crate) fn http_client() -> reqwest::blocking::Client {
 }
 
 pub(crate) fn github_token() -> Option<String> {
-    std::env::var("GITHUB_TOKEN").ok().filter(|t| !t.is_empty())
+    github_token_from_env(|name| std::env::var(name).ok())
+}
+
+fn github_token_from_env(get: impl Fn(&str) -> Option<String>) -> Option<String> {
+    ["OPENSRC_GITHUB_TOKEN", "GITHUB_TOKEN"]
+        .into_iter()
+        .find_map(|name| get(name).filter(|token| !token.is_empty()))
 }
 
 pub(crate) fn gitlab_token() -> Option<String> {
@@ -253,6 +259,32 @@ pub fn detect_input_type(spec: &str) -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_github_token_precedence() {
+        let cases = [
+            (Some("opensrc"), Some("github"), Some("opensrc")),
+            (Some("opensrc"), None, Some("opensrc")),
+            (None, Some("github"), Some("github")),
+            (Some(""), Some("github"), Some("github")),
+            (None, None, None),
+            (Some(""), Some(""), None),
+            (None, Some(""), None),
+            (Some(""), None, None),
+        ];
+
+        for (opensrc, github, expected) in cases {
+            let token = github_token_from_env(|name| {
+                match name {
+                    "OPENSRC_GITHUB_TOKEN" => opensrc,
+                    "GITHUB_TOKEN" => github,
+                    _ => panic!("unexpected environment variable: {name}"),
+                }
+                .map(str::to_owned)
+            });
+            assert_eq!(token.as_deref(), expected);
+        }
+    }
 
     #[test]
     fn test_is_git_repo_url_github() {

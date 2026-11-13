@@ -17,7 +17,7 @@ pub enum Error {
     #[error("{0}")]
     AccessDenied(String),
 
-    #[error("GitHub API rate limit exceeded. Try again later or set GITHUB_TOKEN.")]
+    #[error("GitHub API rate limit exceeded. Try again later or set OPENSRC_GITHUB_TOKEN or GITHUB_TOKEN.")]
     RateLimitExceeded,
 
     #[error("Invalid repository format: {0}")]
